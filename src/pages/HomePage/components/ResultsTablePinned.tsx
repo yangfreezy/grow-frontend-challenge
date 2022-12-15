@@ -23,8 +23,8 @@ export const PinnedResultsTableHeader = () => (
 /*
   Note: I realize I could have potentially DRY'ed up this component and the ResultsTable, but it felt like
   a situation where it wouldn't have necessarily produced much benefit in actuality, especially given the 
-  scope of the project. I do like to abstract code it felt a bit like overkill to pass in an emoji, add
-  a flag to display or not to display the date (since this component has a date and the other doesn't);
+  scope of the project. I do like to abstract code but it felt a bit like overkill to pass in an emoji, add
+  a flag to display or not to display the date (since this component has a date and the other doesn't), etc;
 */
 
 const PinnedResultsTable = ({ pinnedArticles, togglePinnedArticles } : PinnedResultsTableProps) => {
