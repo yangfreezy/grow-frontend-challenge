@@ -70,3 +70,9 @@ As I mentioned above, the countries.json decoupling from the actual API is somet
 
 ### API limitations
 Due to the fact that the API did not support using limits, I realize these api calls could be improved. I think React-Query could have helped with caching and reducing the number of fetches, but I instead opted to simply debounce the API calls to limit subsequent calls from re-renders. 
+
+# API Endpoints
+
+This application currently only uses 1 endpoint since it filters by country by default (defaulting to US)
+
+- `https://wikimedia.org/api/rest_v1/metrics/pageviews/top-per-country/${countryCode}/all-access/${dateToDisplay}`

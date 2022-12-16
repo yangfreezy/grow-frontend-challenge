@@ -11,10 +11,6 @@ import ResultsTable from './components/ResultsTable';
 import WikiPageHeader from './components/WikiPageHeader';
 import moment from 'moment';
 
-// ADD a loading animation for the api calls
-// Add something for when there are no results
-
-
 const pageLayoutStyles = {
   display: 'flex', alignItems: 'center', flex: 1, flexDirection: 'column'
 };
