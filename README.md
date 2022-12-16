@@ -53,16 +53,20 @@ Given that a lot of the functionality came out of the box with MUI, I felt like 
 
 If I had more time I would abstract error handling more, add error boundaries to logic, and added UI components to manage states where the fetch request returned nothing, were loading, etc. 
 
-### 3 - React-query
+### 3 - Internationalization / Locale
+
+If this app were to scale, I'd also not have left text in plain english, and or hard-coded the date formatting as much. I'd set up something with i18next where the text is dynamic depending on the language. 
+
+### 4 - React-query
 
 React-Query was another package I was wanting to learn, but after attempting for a while, I decided 2 new technologies was enough
 for one take home. If I had more time, I'd have looped in the fetches to react-query. 
 
-### 4 - Style reusability
+### 5 - Style reusability
 
 If I had time I would be more intentional about the styles I'm using - some of them are one offs, and I'd much prefer to create more reusable layouts, themes, etc., though, for the sake of this project they'd have only been used in like 2-3 instances max, so I decided to prioritize other aspects. 
 
-### 5 - Country API
+### 6 - Country API
 
 As I mentioned above, the countries.json decoupling from the actual API is something to consider deeper. I think given the relatively static nature of countries (at least compared to things like tweets, etc) this one is pretty low on the priority list, but I do wonder if there could have been a more elegant solution to handling the lack of API support whilst giving the user a relatively error free / stress free experience. 
 
