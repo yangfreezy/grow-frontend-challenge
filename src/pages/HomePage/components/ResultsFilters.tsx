@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import moment, { Moment } from 'moment';
 import { AxiosResponse } from 'axios';
-import _ from 'lodash';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { Container } from '@mui/material';
@@ -29,12 +28,8 @@ const ResultsFilters = ({ setResults } : ResultsFiltersProps) => {
     const [country, setCountry] = useState<Country>({ code: 'US', name: 'United States of America' });
     const [displayError, setDisplayError] = useState(false);
 
-    const displayErrorSnackbar = () => {
-        setDisplayError(true);
-    };
-
     const handleFetchError = (e: unknown) => {
-      displayErrorSnackbar();
+      setDisplayError(true);
       console.error(e);
       // Report to error logging service
     }
@@ -45,20 +40,25 @@ const ResultsFilters = ({ setResults } : ResultsFiltersProps) => {
         const [results] = items;
         const articles = results?.articles;
         setResults(articles.slice(0, +numResults));
+      } else {
+        throw new Error('Unexpected data type in response');
       }
     }
 
     const dateToRequest = date || yesterday;
     const { code: countryCode } = country;
 
-    const fetchResults = _.debounce(async () => {
-      const url = getWikiReqUrl(dateToRequest, countryCode)
-      getResource({
-        url,
-        onError: handleFetchError,
-        onSuccess: handleFetchSuccess,
-      })
-    }, 1000)
+    const fetchResults = useCallback(
+      async () => {
+        const url = getWikiReqUrl(dateToRequest, countryCode)
+        getResource({
+          url,
+          onError: handleFetchError,
+          onSuccess: handleFetchSuccess,
+        })
+      },
+      [dateToRequest, countryCode]
+    );
     
       useEffect(() => {
         fetchResults();
@@ -73,7 +73,7 @@ const ResultsFilters = ({ setResults } : ResultsFiltersProps) => {
               />
               <CountrySelector
                   country={country}
-                  onChange={(value : Country) : void => { setCountry(value)}}
+                  onChange={(value: Country) : void => setCountry(value)}
               />
               <NumberOfResultsSelector
                   results={numResults}

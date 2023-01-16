@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, TableHead, TableBody, TableRow, TableCell, Checkbox } from '@mui/material';
+import { Table, TableHead, Button, TableBody, TableRow, TableCell, Checkbox } from '@mui/material';
 import { WikiPageViewMetrics } from '../../../types/wiki';
 import { getArticleId, makeArticleTitleReadable } from '../../../utils/wiki';
 
@@ -8,6 +8,7 @@ type ResultsTableProps = {
     pinnedArticles: WikiPageViewMetrics[],
     togglePinnedArticles: (article : WikiPageViewMetrics) => void,
     getIsArticleSelected: (res : WikiPageViewMetrics) => boolean,
+    handleDetailClick: (articleTitle : string) => void,
 }
 
 export const ResultsTableHeader = () => (
@@ -21,7 +22,7 @@ export const ResultsTableHeader = () => (
     </TableHead>
 );
 
-const ResultsTable = ({ results, getIsArticleSelected, togglePinnedArticles } : ResultsTableProps) => {
+const ResultsTable = ({ results, getIsArticleSelected, togglePinnedArticles, handleDetailClick } : ResultsTableProps) => {
     return (
         <Table stickyHeader size="medium" data-testid="ResultsTable">
             <ResultsTableHeader />
@@ -48,7 +49,16 @@ const ResultsTable = ({ results, getIsArticleSelected, togglePinnedArticles } : 
                             <TableCell component="th" scope="row">
                                 {result.rank}
                             </TableCell>
-                            <TableCell align="right">{makeArticleTitleReadable(result.article)}</TableCell>
+                            <TableCell align="right">
+                                <Button
+                                    disabled={false}
+                                    size="medium"
+                                    variant="text"
+                                    onClick={() => {
+                                        handleDetailClick(result.article);
+                                    }}
+                                >{makeArticleTitleReadable(result.article)}</Button>
+                            </TableCell>
                             <TableCell align="right">{result.views_ceil.toLocaleString("en-US")}</TableCell>
                         </TableRow>
                     )

@@ -1,11 +1,12 @@
 import React from 'react';
-import { Table, TableHead, TableBody, TableRow, TableCell, Checkbox } from '@mui/material';
+import { Button, Table, TableHead, TableBody, TableRow, TableCell, Checkbox } from '@mui/material';
 import { PinnedWikiArticle } from '../../../types/wiki';
 import { getArticleId, makeArticleTitleReadable } from '../../../utils/wiki';
 
 type PinnedResultsTableProps = {
     pinnedArticles: PinnedWikiArticle[],
     togglePinnedArticles: (article : PinnedWikiArticle) => void,
+    handleDetailClick: (articleTitle : string) => void,
 }
 
 export const PinnedResultsTableHeader = () => (
@@ -27,7 +28,7 @@ export const PinnedResultsTableHeader = () => (
   a flag to display or not to display the date (since this component has a date and the other doesn't), etc;
 */
 
-const PinnedResultsTable = ({ pinnedArticles, togglePinnedArticles } : PinnedResultsTableProps) => {
+const PinnedResultsTable = ({ pinnedArticles, togglePinnedArticles, handleDetailClick } : PinnedResultsTableProps) => {
     return (
         <Table stickyHeader size="medium" data-testid="PinnedResultsTable" >
           <PinnedResultsTableHeader />
@@ -54,7 +55,16 @@ const PinnedResultsTable = ({ pinnedArticles, togglePinnedArticles } : PinnedRes
                       {`${result.rank}`}
                     </TableCell>
                     <TableCell align="right">{result.timestamp}</TableCell>
-                    <TableCell align="right">{makeArticleTitleReadable(result.article)}</TableCell>
+                    <TableCell align="right">
+                        <Button
+                            disabled={false}
+                            size="medium"
+                            variant="text"
+                            onClick={() => {
+                                handleDetailClick(result.article);
+                            }}
+                        >{makeArticleTitleReadable(result.article)}</Button>
+                    </TableCell>
                     <TableCell align="right">{result.views_ceil.toLocaleString("en-US")}</TableCell>
                   </TableRow>
                 )

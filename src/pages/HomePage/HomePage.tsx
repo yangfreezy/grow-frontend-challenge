@@ -6,6 +6,7 @@ import useLocalStorageState from '../../hooks/useLocalStorageState';
 import { WikiPageViewMetrics } from '../../types/wiki';
 import { getArticleId } from '../../utils/wiki';
 import ResultsFilters from './components/ResultsFilters';
+import ArticleDetailModal from './components/ArticleDetailModal';
 import PinnedResultsTable from './components/ResultsTablePinned';
 import ResultsTable from './components/ResultsTable';
 import WikiPageHeader from './components/WikiPageHeader';
@@ -18,12 +19,24 @@ const pageLayoutStyles = {
 const HomePage = () => {
   const [pinnedArticles, setPinnedArticles] = useLocalStorageState([], 'pinnedArticles');
   const [results, setResults] = useState<WikiPageViewMetrics[]>([]);
+  const [articleInDetail, setArticleInDetail] = useState<string | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
 
   const getIsArticleSelected = (result : WikiPageViewMetrics, prev: WikiPageViewMetrics[] = pinnedArticles) : boolean => {
-    const uniqueArticleId = getArticleId(result);
-    if (prev.some(a => getArticleId(a) === uniqueArticleId)) return true;
+    const articleId = getArticleId(result);
+    if (prev.some(a => getArticleId(a) === articleId)) return true;
     return false;
   }
+
+  const handleDetailClick = (article: string) => {
+    setArticleInDetail(article);
+    setModalOpen(true);
+  }
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+  };
 
   const removePinnedArticle = (id: string) => pinnedArticles.filter((a : WikiPageViewMetrics) => getArticleId(a) !== id)
 
@@ -35,8 +48,8 @@ const HomePage = () => {
   const togglePinnedArticles = (result : WikiPageViewMetrics) => {
     setPinnedArticles((prev: WikiPageViewMetrics[]) => {
       const alreadySelected = getIsArticleSelected(result, prev);
-      const uniqueArticleId = getArticleId(result);
-      return alreadySelected ? removePinnedArticle(uniqueArticleId) : addPinnedArticle(result);
+      const articleId = getArticleId(result);
+      return alreadySelected ? removePinnedArticle(articleId) : addPinnedArticle(result);
     });
   }
 
@@ -46,17 +59,20 @@ const HomePage = () => {
     <Container sx={pageLayoutStyles}>
       <WikiPageHeader />
       <ResultsFilters setResults={setResults} />
+      <ArticleDetailModal modalOpen={modalOpen} onClose={handleModalClose} articleTitle={articleInDetail}/>
       <>
         {
           showPinnedArticles ? (
             <PinnedResultsTable
               pinnedArticles={pinnedArticles}
               togglePinnedArticles={togglePinnedArticles}
+              handleDetailClick={handleDetailClick}
             />
           ) : null
         }
         <ResultsTable
           results={results}
+          handleDetailClick={handleDetailClick}
           getIsArticleSelected={getIsArticleSelected}
           pinnedArticles={pinnedArticles}
           togglePinnedArticles={togglePinnedArticles}
